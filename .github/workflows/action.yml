@@ -20,19 +20,5 @@ jobs:
         with:
           python-version: 3.x
 
-      - name: Install requests library
-        run: pip install requests
-
-      - name: Check feature flag status
-        run: |
-          flag_status=$(curl -sS https://arnavnad.pythonanywhere.com/)
-          if [ "$flag_status" = "enabled" ]; then
-            echo "Feature flag is enabled"
-            # Trigger GitHub Actions workflow here if needed
-          elif [ "$flag_status" = "disabled" ]; then
-            echo "Feature flag is disabled"
-            # Trigger GitHub Actions workflow here if needed
-          else
-            echo "Unknown feature flag status"
-            exit 1
-          fi
+      - name: Run fetch_feature_flag_status
+        run: python Feature_Flags_3/fetch_feature_flag_status.py
