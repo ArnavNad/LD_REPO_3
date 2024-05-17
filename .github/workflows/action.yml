@@ -21,7 +21,7 @@ jobs:
           python-version: 3.x
 
       - name: Install LaunchDarkly SDK
-        run: pip install server-sdk-launchdarkly
+        run: pip install launchdarkly-server-sdk
 
       - name: Run fetch_feature_flag_status
         run: python Feature_Flags_3/fetch_feature_flag_status.py
