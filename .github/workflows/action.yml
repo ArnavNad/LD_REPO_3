@@ -1,8 +1,11 @@
 name: Update Feature Flag Status
 
 on:
-  schedule:
-    - cron: '0 * * * *'  # Run every hour
+  push:
+    branches:
+      - main
+  repository_dispatch:
+    types: [launchdarkly_webhook]
 
 jobs:
   update-feature-flag-status:
