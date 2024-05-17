@@ -1,11 +1,8 @@
 name: Update Feature Flag Status
 
 on:
-  workflow_dispatch:
-    inputs:
-      launchdarkly_webhook:
-        description: 'LaunchDarkly Webhook Payload'
-        required: true
+  schedule:
+    - cron: '0 * * * *'  # Run every hour
 
 jobs:
   update-feature-flag-status:
@@ -20,15 +17,19 @@ jobs:
         with:
           python-version: 3.x
 
-      - name: Install LaunchDarkly SDK
-        run: |
-          pip install launchdarkly-server-sdk
+      - name: Install requests library
+        run: pip install requests
 
-      - name: Fetch feature flag status
+      - name: Check feature flag status
         run: |
-          python Feature_Flags_3/fetch_feature_flag_status.py
-          exit_status=$?
-          if [ $exit_status -ne 0 ]; then
-            echo "Error: Failed to fetch feature flag status"
-            exit $exit_status
+          flag_status=$(curl -sS https://arnavnad.pythonanywhere.com/)
+          if [ "$flag_status" = "enabled" ]; then
+            echo "Feature flag is enabled"
+            # Trigger GitHub Actions workflow here if needed
+          elif [ "$flag_status" = "disabled" ]; then
+            echo "Feature flag is disabled"
+            # Trigger GitHub Actions workflow here if needed
+          else
+            echo "Unknown feature flag status"
+            exit 1
           fi
