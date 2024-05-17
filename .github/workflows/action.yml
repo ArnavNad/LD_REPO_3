@@ -1,8 +1,11 @@
 name: Update Feature Flag Status
 
 on:
-  repository_dispatch:
-    types: [launchdarkly_webhook]
+  workflow_dispatch:
+    inputs:
+      launchdarkly_webhook:
+        description: 'LaunchDarkly Webhook Payload'
+        required: true
 
 jobs:
   update-feature-flag-status:
