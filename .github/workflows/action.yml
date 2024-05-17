@@ -1,22 +1,32 @@
-name: Evaluate LaunchDarkly flags
+name: Update Feature Flag Status
+
 on:
-  repository_dispatch:
-    types: [flag_updated]  # Listen for webhook events from LaunchDarkly
+  push:
+    branches:
+      - main
 
 jobs:
-  eval-flags:
+  update-feature-flag-status:
     runs-on: ubuntu-latest
-    steps:
-      - name: Evaluate flags
-        id: ld
-        uses: launchdarkly/gha-flags@v1.0.1
-        with:
-          sdk-key: ${{ secrets.LAUNCHDARKLY_SDK_KEY }}
-          flags: Status_Flag,false
-      - name: If true
-        if: fromJSON(steps.ld.outputs.Status_Flag) == true
-        run: echo "The 'Status_Flag' feature flag is true"
-      - name: If false
-        if: fromJSON(steps.ld.outputs.Status_Flag) == false
-        run: echo "The 'Status_Flag' feature flag is false"
 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install LaunchDarkly SDK
+        run: |
+          pip install launchdarkly-server-sdk
+      - name: Fetch feature flag status
+        run: |
+          python Feature_Flags_3/fetch_feature_flag_status.py
+          exit_status=$?
+          if [ $exit_status -ne 0 ]; then
+            echo "Error: Failed to fetch feature flag status"
+            exit $exit_status
+          fi
+      # Add more steps as needed
