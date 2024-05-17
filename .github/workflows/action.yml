@@ -1,9 +1,8 @@
 name: Update Feature Flag Status
 
 on:
-  push:
-    branches:
-      - main
+  repository_dispatch:
+    types: [launchdarkly_webhook]
 
 jobs:
   update-feature-flag-status:
@@ -21,6 +20,7 @@ jobs:
       - name: Install LaunchDarkly SDK
         run: |
           pip install launchdarkly-server-sdk
+
       - name: Fetch feature flag status
         run: |
           python Feature_Flags_3/fetch_feature_flag_status.py
@@ -29,4 +29,3 @@ jobs:
             echo "Error: Failed to fetch feature flag status"
             exit $exit_status
           fi
-      # Add more steps as needed
