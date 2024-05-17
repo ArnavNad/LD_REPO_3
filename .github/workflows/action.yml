@@ -9,10 +9,10 @@ jobs:
         uses: launchdarkly/gha-flags@v1.0.1
         with:
           sdk-key: ${{ secrets.LAUNCHDARKLY_SDK_KEY }}
-          flags: test-boolean-flag,false
+          flags: Status_Flag,false
       - name: If true
-        if: fromJSON(steps.ld.outputs.test-boolean-flag) == true
+        if: fromJSON(steps.ld.outputs.Status_Flag) == true
         run: echo "It's true"
       - name: If false
-        if: fromJSON(steps.ld.outputs.test-boolean-flag) == false
+        if: fromJSON(steps.ld.outputs.Status_Flag) == false
         run: echo "It's false"
