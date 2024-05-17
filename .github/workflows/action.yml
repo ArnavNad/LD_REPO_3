@@ -1,5 +1,8 @@
 name: Evaluate LaunchDarkly flags
-on: push
+on:
+  repository_dispatch:
+    types: [flag_updated]  # Listen for webhook events from LaunchDarkly
+
 jobs:
   eval-flags:
     runs-on: ubuntu-latest
@@ -12,7 +15,7 @@ jobs:
           flags: Status_Flag,false
       - name: If true
         if: fromJSON(steps.ld.outputs.Status_Flag) == true
-        run: echo "It's true"
+        run: echo "The 'Status_Flag' feature flag is true"
       - name: If false
         if: fromJSON(steps.ld.outputs.Status_Flag) == false
-        run: echo "It's false"
+        run: echo "The 'Status_Flag' feature flag is false"
