@@ -1,8 +1,9 @@
 name: Update Feature Flag Status
 
 on:
-  schedule:
-    - cron: '0 * * * *'  # Run every hour
+  push:
+      brances:
+              - main
 
 jobs:
   update-feature-flag-status:
